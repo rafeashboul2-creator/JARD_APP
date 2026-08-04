@@ -1,4 +1,4 @@
-const CACHE_NAME = 'liwaa-inv-v1';
+const CACHE_NAME = 'liwaa-inv-v2';
 const ASSETS = [
   './',
   './index.html',
