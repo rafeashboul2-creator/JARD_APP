@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>جرد محلات لواء الدين</title>
+    <meta name="theme-color" content="#0b1329">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --bg-main: #0b1329;
+            --bg-card: #141e38;
+            --bg-card-hover: #1c2a4e;
+            --bg-input: #080e1e;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-amber: #fbbf24;
+            --accent-green: #10b981;
+            --accent-blue: #38bdf8;
+            --accent-red: #f43f5e;
+            --accent-purple: #c084fc;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow-card: 0 12px 30px -5px rgba(0, 0, 0, 0.5);
+            --glow-green: 0 0 15px rgba(16, 185, 129, 0.25);
+            --glow-amber: 0 0 15px rgba(251, 191, 36, 0.25);
+        }
+
+        body.light-mode {
+            --bg-main: #f1f5f9;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f8fafc;
+            --bg-input: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+            --glow-green: none;
+            --glow-amber: none;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-main); color: var(--text-primary); padding-bottom: 95px; min-height: 100vh; direction: rtl; transition: background-color 0.3s, color 0.3s; }
+        
+        /* HEADER */
+        header { background: var(--bg-card); padding: 14px 18px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-card); backdrop-filter: blur(10px); }
+        .header-content { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+        .app-title { display: flex; align-items: center; gap: 12px; }
+        .app-title h1 { font-size: 1.1rem; font-weight: 900; color: var(--text-primary); letter-spacing: -0.3px; }
+        .app-title .icon-box { width: 40px; height: 40px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(56, 189, 248, 0.2)); padding: 8px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 1.3rem; }
+        
+        .header-badges { display: flex; align-items: center; gap: 8px; }
+        .header-action-btn { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+        .header-action-btn.active { background: rgba(251, 191, 36, 0.2); border-color: var(--accent-amber); color: var(--accent-amber); }
+        .btn-menu-trigger { background: var(--accent-blue); color: #080e1e; border-color: var(--accent-blue); font-weight: 900; }
+        .autosave-badge { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue); font-size: 0.75rem; padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.25); font-weight: 700; }
+
+        /* SIDEBAR DRAWER */
+        .sidebar-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s ease; backdrop-filter: blur(4px); }
+        .sidebar-overlay.active { display: block; opacity: 1; }
+        .sidebar-drawer { position: fixed; top: 0; right: -320px; width: 310px; height: 100%; background: var(--bg-card); border-left: 1px solid var(--border-color); z-index: 1001; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 24px 18px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; box-shadow: -10px 0 35px rgba(0,0,0,0.6); }
+        .sidebar-drawer.active { right: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--border-color); }
+        .sidebar-header h3 { font-size: 1.1rem; color: var(--accent-amber); font-weight: 900; display: flex; align-items: center; gap: 8px; }
+        .sidebar-close-btn { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 50%; width: 34px; height: 34px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .sidebar-section { display: flex; flex-direction: column; gap: 10px; }
+        .sidebar-section-title { font-size: 0.78rem; color: var(--text-secondary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .sidebar-btn { width: 100%; padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.88rem; font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: transform 0.1s; }
+        .sidebar-btn:active { transform: scale(0.97); }
+        .sidebar-btn-whatsapp { background-color: #25D366; color: #000; }
+        .sidebar-btn-excel { background-color: #107c41; color: #fff; }
+        .sidebar-btn-print { background-color: var(--accent-blue); color: #080e1e; }
+        .sidebar-btn-backup { background-color: var(--accent-purple); color: #fff; }
+        .sidebar-btn-restore { background-color: #0284c7; color: #fff; }
+        .sidebar-btn-pin { background-color: rgba(251, 191, 36, 0.15); color: var(--accent-amber); border: 1px solid rgba(251, 191, 36, 0.3); }
+        .sidebar-btn-reset { background-color: rgba(244, 63, 94, 0.15); color: var(--accent-red); border: 1px solid rgba(244, 63, 94, 0.3); }
+
+        /* CONTAINER & KEYBOARD MARGINS FIX */
+        .container { max-width: 900px; margin: 0 auto; padding: 16px; padding-bottom: 380px !important; }
+        .item-card, .bento-card, input {
+            scroll-margin-bottom: 280px !important;
+            scroll-margin-top: 90px !important;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* PROGRESS BAR */
+        .progress-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 18px; box-shadow: var(--shadow-card); }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 800; margin-bottom: 10px; }
+        .progress-bar-bg { width: 100%; height: 10px; background: var(--bg-input); border-radius: 6px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-green)); width: 0%; transition: width 0.4s ease; }
+
+        /* CONTROLS & SEARCH */
+        .controls-wrapper { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
+        .view-switcher-bar { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 8px 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+        .view-mode-btns { display: flex; gap: 6px; }
+        .view-btn { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .view-btn.active { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }
+
+        .filter-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+        .filter-pills::-webkit-scrollbar { display: none; }
+        .filter-pill { background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-color); padding: 7px 14px; border-radius: 25px; font-size: 0.78rem; font-weight: 800; cursor: pointer; transition: all 0.2s; whitespace: nowrap; }
+        .filter-pill.active { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }
+        
+        .category-pill { background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; whitespace: nowrap; }
+        .category-pill.active { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border-color: var(--accent-green); }
+
+        .search-box { position: relative; }
+        .search-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 42px 12px 14px; color: var(--text-primary); font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+        .search-input:focus { border-color: var(--accent-blue); }
+        .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; fill: var(--text-secondary); }
+
+        /* INPUT WRAPPER WITH TINY CLEAR X BUTTON */
+        .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
+        .input-wrapper input { padding-left: 20px !important; }
+        .btn-tiny-clear {
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.62rem;
+            cursor: pointer;
+            opacity: 0.35;
+            padding: 2px 4px;
+            border-radius: 50%;
+            line-height: 1;
+            transition: opacity 0.2s;
+            z-index: 5;
+        }
+        .btn-tiny-clear:hover, .btn-tiny-clear:active { opacity: 1; color: var(--accent-red); }
+
+        /* MODERN INVENTORY CARDS */
+        .inventory-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-bottom: 18px; }
+        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow-card); transition: transform 0.15s, border-color 0.2s; position: relative; overflow: hidden; }
+        .item-card.incomplete { border-color: rgba(244, 63, 94, 0.4); background: linear-gradient(180deg, var(--bg-card), rgba(244, 63, 94, 0.05)); }
+        .item-card.locked { opacity: 0.8; background: rgba(100, 116, 139, 0.08); }
+
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; }
+        .card-icon-title { display: flex; align-items: center; gap: 10px; width: 100%; }
+        .item-cat-icon { font-size: 1.4rem; background: var(--bg-input); padding: 6px; border-radius: var(--radius-md); border: 1px solid var(--border-color); line-height: 1; }
+        .item-name-input { width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 0.95rem; font-weight: 800; padding: 8px 10px; border-radius: var(--radius-md); outline: none; }
+        .item-name-input:focus { border-color: var(--accent-blue); }
+
+        .card-body-inputs { display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .field-box { display: flex; flex-direction: column; gap: 4px; }
+        .field-label { font-size: 0.72rem; color: var(--text-secondary); font-weight: 700; }
+
+        .qty-control-card { display: flex; align-items: center; gap: 4px; }
+        .btn-qty-card { width: 36px; height: 38px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; font-weight: 900; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-qty-card:active { background: var(--accent-blue); color: #080e1e; }
+
+        .num-input { width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 8px 10px; color: var(--text-primary); font-size: 0.95rem; font-weight: 800; outline: none; direction: ltr !important; text-align: right; }
+        .num-input:focus { border-color: var(--accent-blue); }
+
+        .card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border-color); }
+        .subtotal-tag { font-size: 1.05rem; font-weight: 900; color: var(--accent-amber); }
+        .card-actions { display: flex; gap: 6px; }
+
+        .btn-card-action { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 10px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 800; }
+        .btn-card-action.locked { background: rgba(251, 191, 36, 0.2); color: var(--accent-amber); border-color: var(--accent-amber); }
+        .btn-card-delete { background: rgba(244, 63, 94, 0.15); color: var(--accent-red); border-color: rgba(244, 63, 94, 0.3); }
+
+        /* TABLE VIEW */
+        .items-table-wrapper { overflow-x: auto; margin-bottom: 18px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
+        table.items-table { width: 100%; border-collapse: collapse; min-width: 600px; background: var(--bg-card); }
+        table.items-table th { background: rgba(0, 0, 0, 0.2); color: var(--text-secondary); font-size: 0.8rem; padding: 12px; text-align: right; border-bottom: 1px solid var(--border-color); font-weight: 800; }
+        table.items-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        
+        /* BENTO GRID FINANCIAL BUDGET & PROFITS */
+        .bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 14px; }
+        .bento-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; justify-content: space-between; gap: 8px; position: relative; overflow: hidden; }
+        .bento-card.featured-gross { grid-column: 1 / -1; background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(251, 191, 36, 0.08)); border-color: rgba(56, 189, 248, 0.3); }
+        .bento-card.featured-expenses { grid-column: 1 / -1; background: linear-gradient(135deg, rgba(244, 63, 94, 0.12), rgba(251, 191, 36, 0.05)); border-color: rgba(244, 63, 94, 0.35); }
+        .bento-card.featured-profit { grid-column: 1 / -1; background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(56, 189, 248, 0.1)); border-color: rgba(16, 185, 129, 0.5); box-shadow: var(--glow-green); }
+        .bento-card.featured-mudaraba { grid-column: 1 / -1; background: linear-gradient(135deg, rgba(251, 191, 36, 0.18), rgba(192, 132, 252, 0.1)); border-color: rgba(251, 191, 36, 0.45); box-shadow: var(--glow-amber); }
+        
+        .bento-title { font-size: 0.82rem; color: var(--text-secondary); font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .bento-value { font-size: 1.5rem; font-weight: 900; color: var(--text-primary); direction: ltr; text-align: right; }
+        .bento-value.green { color: var(--accent-green); }
+        .bento-value.amber { color: var(--accent-amber); }
+        .bento-value.blue { color: var(--accent-blue); }
+        .bento-value.red { color: var(--accent-red); }
+
+        .btn-add-item { background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(16, 185, 129, 0.15)); color: var(--accent-blue); border: 1px dashed var(--accent-blue); width: 100%; padding: 14px; border-radius: var(--radius-lg); font-weight: 900; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 18px; }
+        .btn-add-item:active { transform: scale(0.98); }
+
+        .fab-btn { position: fixed; bottom: 85px; left: 18px; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-green), #059669); color: #ffffff; border: none; font-size: 2rem; font-weight: bold; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5); cursor: pointer; z-index: 150; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+        .fab-btn:active { transform: scale(0.92); }
+
+        /* STICKY NAVIGATION */
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-card); border-top: 1px solid var(--border-color); padding: 8px 14px; z-index: 200; box-shadow: 0 -4px 25px rgba(0,0,0,0.4); backdrop-filter: blur(10px); }
+        .bottom-bar-content { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-around; gap: 8px; }
+        .mobile-nav-tabs { display: flex; width: 100%; background: var(--bg-input); border-radius: 30px; border: 1px solid var(--border-color); padding: 4px; }
+        .nav-tab-btn { flex: 1; padding: 10px 8px; text-align: center; font-size: 0.85rem; font-weight: 900; color: var(--text-secondary); background: none; border: none; border-radius: 25px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .nav-tab-btn.active { color: var(--accent-green); background: var(--bg-card); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+
+        .toast { position: fixed; top: 75px; left: 50%; transform: translateX(-50%); background: var(--accent-green); color: #080e1e; padding: 12px 24px; border-radius: 30px; font-size: 0.9rem; font-weight: 900; opacity: 0; transition: all 0.3s ease; z-index: 300; pointer-events: none; box-shadow: 0 6px 20px rgba(0,0,0,0.4); text-align: center; }
+        .toast.show { opacity: 1; }
+
+        /* LOCK SCREEN */
+        #lock-screen-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-main); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .pin-container { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; width: 100%; max-width: 320px; text-align: center; box-shadow: var(--shadow-card); }
+        .pin-dots { display: flex; justify-content: center; gap: 12px; margin: 24px 0; }
+        .pin-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border-color); background: transparent; transition: all 0.2s; }
+        .pin-dot.filled { background: var(--accent-green); border-color: var(--accent-green); box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); }
+        .pin-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; direction: ltr !important; }
+        .pin-btn { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 1.4rem; font-weight: 900; padding: 16px; border-radius: var(--radius-md); cursor: pointer; }
+        .pin-btn:active { background: var(--accent-blue); color: #080e1e; }
+
+        @media print {
+            body { background: #fff; color: #000; padding: 0; }
+            header, .bottom-bar, .controls-wrapper, .btn-add-item, .fab-btn, #lock-screen-overlay, .sidebar-drawer, .sidebar-overlay { display: none !important; }
+            .container { max-width: 100%; padding: 0; }
+            .tab-content { display: block !important; margin-bottom: 20px; }
+            .bento-card, .item-card { border: 1px solid #ccc; background: #fff; color: #000; box-shadow: none; }
+            .bento-value, .subtotal-tag { color: #000 !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOCK SCREEN OVERLAY -->
+    <div id="lock-screen-overlay" style="display: none;">
+        <div class="pin-container">
+            <div style="font-size: 2.8rem; margin-bottom: 12px;">🔒</div>
+            <h2 style="font-size: 1.15rem; color: var(--text-primary); margin-bottom: 6px; font-weight: 900;">محلات لواء الدين</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">أدخل رمز الـ PIN للدخول للنظام</p>
+            
+            <div class="pin-dots">
+                <div class="pin-dot" id="pdot-0"></div>
+                <div class="pin-dot" id="pdot-1"></div>
+                <div class="pin-dot" id="pdot-2"></div>
+                <div class="pin-dot" id="pdot-3"></div>
+            </div>
+
+            <div class="pin-keypad">
+                <button class="pin-btn" onclick="AppController.pressPin('1')">1</button>
+                <button class="pin-btn" onclick="AppController.pressPin('2')">2</button>
+                <button class="pin-btn" onclick="AppController.pressPin('3')">3</button>
+                <button class="pin-btn" onclick="AppController.pressPin('4')">4</button>
+                <button class="pin-btn" onclick="AppController.pressPin('5')">5</button>
+                <button class="pin-btn" onclick="AppController.pressPin('6')">6</button>
+                <button class="pin-btn" onclick="AppController.pressPin('7')">7</button>
+                <button class="pin-btn" onclick="AppController.pressPin('8')">8</button>
+                <button class="pin-btn" onclick="AppController.pressPin('9')">9</button>
+                <button class="pin-btn" style="font-size: 0.9rem; color: var(--accent-red);" onclick="AppController.clearPin()">مسح</button>
+                <button class="pin-btn" onclick="AppController.pressPin('0')">0</button>
+                <button class="pin-btn" style="font-size: 0.9rem; color: var(--accent-amber);" onclick="AppController.backspacePin()">⌫</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR DRAWER OVERLAY -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="AppController.closeSidebar()"></div>
+
+    <!-- SIDEBAR DRAWER MENU -->
+    <div class="sidebar-drawer" id="sidebar-drawer">
+        <div class="sidebar-header">
+            <h3>⚙️ القائمة والخدمات</h3>
+            <button class="sidebar-close-btn" onclick="AppController.closeSidebar()">✕</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">📊 التصدير والمشاركة</div>
+            <button class="sidebar-btn sidebar-btn-whatsapp" onclick="AppController.sendToWhatsApp()">
+                💬 مشاركة التقرير عبر الواتساب
+            </button>
+            <button class="sidebar-btn sidebar-btn-excel" onclick="AppController.exportToCSV()">
+                📗 تصدير ملف إكسل (CSV)
+            </button>
+            <button class="sidebar-btn sidebar-btn-print" onclick="window.print()">
+                🖨️ طباعة التقرير كاملاً
+            </button>
+        </div>
+
+        <hr style="border-color: var(--border-color); opacity: 0.5;">
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">💾 البيانات والأمان</div>
+            <button class="sidebar-btn sidebar-btn-backup" onclick="AppController.backupJSONData()">
+                📦 تنزيل نسخة احتياطية (JSON)
+            </button>
+            <input type="file" id="restore-file-input" style="display:none;" onchange="AppController.restoreJSONData(event)" accept=".json">
+            <button class="sidebar-btn sidebar-btn-restore" onclick="document.getElementById('restore-file-input').click()">
+                📥 استرجاع نسخة ملف بيانات
+            </button>
+            <button class="sidebar-btn sidebar-btn-pin" onclick="AppController.changeAppPin()">
+                🔑 تغيير رمز الـ PIN الخاص بالقفل
+            </button>
+        </div>
+
+        <hr style="border-color: var(--border-color); opacity: 0.5;">
+
+        <div class="sidebar-section" style="margin-top: auto;">
+            <div class="sidebar-section-title" style="color: var(--accent-red);">⚠️ إعدادات مصنع</div>
+            <button class="sidebar-btn sidebar-btn-reset" onclick="AppController.resetAllData()">
+                🗑️ تصفير الشامل والبدء من جديد
+            </button>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <div class="app-title">
+                <div class="icon-box">📦</div>
+                <h1>محلات لواء الدين للأجهزة الكهربائية</h1>
+            </div>
+            <div class="header-badges">
+                <button class="header-action-btn btn-menu-trigger" onclick="AppController.openSidebar()">
+                    ☰ <span>القائمة</span>
+                </button>
+                <button class="header-action-btn" onclick="AppController.lockAppNow()">
+                    🔒 <span>قفل</span>
+                </button>
+                <button id="btn-theme-mode" class="header-action-btn" onclick="AppController.toggleThemeMode()">🌙</button>
+                <div class="autosave-badge" id="autosave-time">محفوظ تلقائياً</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- TAB 1: INVENTORY -->
+        <div id="tab-inventory" class="tab-content active">
+            <div class="progress-box">
+                <div class="progress-header">
+                    <span>نسبة إنجاز تسعير بضاعة المستودع المعروضة:</span>
+                    <span id="progress-percent-text" style="color: var(--accent-green);">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="controls-wrapper">
+                <div class="view-switcher-bar">
+                    <span style="font-size: 0.82rem; font-weight: 800; color: var(--text-secondary);">طريقة عرض الأصناف:</span>
+                    <div class="view-mode-btns">
+                        <button class="view-btn active" id="btn-view-cards" onclick="AppController.setViewMode('cards')">📱 بطاقات</button>
+                        <button class="view-btn" id="btn-view-table" onclick="AppController.setViewMode('table')">💻 جدول</button>
+                    </div>
+                </div>
+
+                <div class="filter-pills">
+                    <button class="filter-pill active" onclick="AppController.setFilter('all', this)">الكل (<span id="count-all">0</span>)</button>
+                    <button class="filter-pill" onclick="AppController.setFilter('priced', this)">المسعر (<span id="count-priced">0</span>)</button>
+                    <button class="filter-pill" onclick="AppController.setFilter('unpriced', this)">يحتاج تسعير (<span id="count-unpriced">0</span>)</button>
+                </div>
+
+                <div class="filter-pills" id="category-pills-container"></div>
+
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" id="inventory-search" class="search-input" placeholder="بحث سريع باسم الصنف أو الجهاز..." oninput="AppController.handleSearchInput()">
+                </div>
+            </div>
+
+            <!-- CARDS CONTAINER -->
+            <div id="inventory-cards-container" class="inventory-cards-grid"></div>
+
+            <!-- TABLE CONTAINER -->
+            <div id="inventory-table-container" class="items-table-wrapper" style="display: none;">
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 35%;">اسم الجهاز / الصنف</th>
+                            <th style="width: 25%;">الكمية الفعلية</th>
+                            <th style="width: 20%;">سعر اليوم</th>
+                            <th style="width: 20%;">الإجمالي (د.أ)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-tbody"></tbody>
+                </table>
+            </div>
+
+            <button class="btn-add-item" onclick="AppController.addInventoryRow()">
+                <span>➕ إضافة صنف / جهاز جديد بالجرد</span>
+            </button>
+
+            <div class="bento-card">
+                <div class="bento-title">📦 إجمالي قيمة البضاعة في المعرض والمستودع</div>
+                <div class="bento-value amber" id="total-stock-display">0 د.أ</div>
+            </div>
+        </div>
+
+        <!-- TAB 2: FINANCIAL BUDGET -->
+        <div id="tab-budget" class="tab-content">
+            <h2 style="font-size: 1.1rem; margin-bottom: 12px; color: var(--accent-amber); font-weight: 900;">💰 التدقيق المالي المباشر للميزانية الختامية</h2>
+            
+            <div class="bento-grid">
+                <div class="bento-card">
+                    <div class="bento-title">📦 قيمة بضاعة المستودع (مرحّل)</div>
+                    <input type="text" id="budget-stock-val" class="num-input" readonly style="color: var(--accent-amber); font-size: 1.1rem;">
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-title">💵 الكاش الصافي المتوفر فعلياً</div>
+                    <div class="input-wrapper">
+                        <input type="text" inputmode="decimal" id="budget-cash" class="num-input" onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.handleBudgetChange()">
+                        <button class="btn-tiny-clear" onclick="UIView.clearInput('budget-cash')">✕</button>
+                    </div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-title">🤝 ديون لنا على الزبائن (مستحقات)</div>
+                    <div class="input-wrapper">
+                        <input type="text" inputmode="decimal" id="budget-debts-to-us" class="num-input" onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.handleBudgetChange()">
+                        <button class="btn-tiny-clear" onclick="UIView.clearInput('budget-debts-to-us')">✕</button>
+                    </div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-title">💎 إجمالي الأصول المتوفرة (بضاعة+كاش+ديون لنا)</div>
+                    <div class="bento-value blue" id="budget-total-assets">0 د.أ</div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-title">🏢 ديون علينا للموردين والشركات</div>
+                    <div class="input-wrapper">
+                        <input type="text" inputmode="decimal" id="budget-debts-we-owe" class="num-input" onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.handleBudgetChange()">
+                        <button class="btn-tiny-clear" onclick="UIView.clearInput('budget-debts-we-owe')">✕</button>
+                    </div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-title">💼 المصاريف الشهرية الثابتة</div>
+                    <div class="input-wrapper">
+                        <input type="text" inputmode="decimal" id="budget-monthly-expense" class="num-input" onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.handleBudgetChange()">
+                        <button class="btn-tiny-clear" onclick="UIView.clearInput('budget-monthly-expense')">✕</button>
+                    </div>
+                </div>
+
+                <div class="bento-card featured-gross">
+                    <div class="bento-title">📈 الربح الإجمالي التشغيلي (قبل خصم المصاريف الثابتة)</div>
+                    <div class="bento-value blue" id="budget-gross-profit" style="font-size: 1.6rem;">0 د.أ</div>
+                </div>
+
+                <div class="bento-card featured-expenses">
+                    <div class="bento-title">🔻 (-) إجمالي المصاريف السنوية الثابتة الخصم (12 شهر)</div>
+                    <div class="bento-value red" id="budget-annual-expenses" style="font-size: 1.6rem;">0 د.أ</div>
+                </div>
+
+                <div class="bento-card featured-profit">
+                    <div class="bento-title">🏆 (=) صافي الربح السنوي النهائي (بعد خصم كافة المصاريف والديون)</div>
+                    <div class="bento-value green" id="budget-net-profit" style="font-size: 1.9rem;">0 د.أ</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: PROFIT DISTRIBUTION -->
+        <div id="tab-profit" class="tab-content">
+            <h2 style="font-size: 1.1rem; margin-bottom: 12px; color: var(--accent-amber); font-weight: 900;">🤝 نظام توزيع الأرباح والشراكة (أعداد صحيحة مقربة)</h2>
+
+            <div class="bento-grid">
+                <div class="bento-card" style="grid-column: 1 / -1; background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3);">
+                    <div class="bento-title">📊 صافي الربح السنوي المتاح للتوزيع (مرحّل من الميزانية الختامية)</div>
+                    <div class="bento-value green" id="profit-tab-net-profit-display" style="font-size: 1.5rem;">0 د.أ</div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-title">👤 رأس مال الشريك محمد العيسى</div>
+                    <div class="input-wrapper">
+                        <input type="text" inputmode="decimal" id="cap-mohamed" class="num-input" onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.handleBudgetChange()">
+                        <button class="btn-tiny-clear" onclick="UIView.clearInput('cap-mohamed')">✕</button>
+                    </div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-title">👤 رأس مال الشريك لواء الدين</div>
+                    <div class="input-wrapper">
+                        <input type="text" inputmode="decimal" id="cap-liwaa" class="num-input" onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.handleBudgetChange()">
+                        <button class="btn-tiny-clear" onclick="UIView.clearInput('cap-liwaa')">✕</button>
+                    </div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-title">📈 ربح رأس مال محمد الأولي (حسب نسبة رأس المال)</div>
+                    <div class="bento-value blue" id="base-mohamed">0 د.أ</div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-title">📈 ربح رأس مال لواء الأولي (حسب نسبة رأس المال)</div>
+                    <div class="bento-value amber" id="base-liwaa">0 د.أ</div>
+                </div>
+
+                <div class="bento-card" style="grid-column: 1 / -1;">
+                    <div class="bento-title">⚙️ نسبة مكافأة الإدارة والمحاسبة والمضاربة (تقتطع من ربح الشريك الممول)</div>
+                    <div class="input-wrapper">
+                        <input type="text" inputmode="decimal" id="mudaraba-pct" class="num-input" value="50" onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.handleBudgetChange()">
+                        <button class="btn-tiny-clear" onclick="UIView.clearInput('mudaraba-pct')">✕</button>
+                    </div>
+                </div>
+
+                <div class="bento-card featured-mudaraba">
+                    <div class="bento-title">⭐️ مكافأة لواء الدين كمضارب وإداري (خصم من ربح محمد وتُضاف للواء)</div>
+                    <div class="bento-value amber" id="mudaraba-fee-display" style="font-size: 1.5rem;">0 د.أ</div>
+                </div>
+
+                <div class="bento-card" style="background: rgba(56, 189, 248, 0.12); border-color: rgba(56, 189, 248, 0.35);">
+                    <div class="bento-title" style="color: var(--accent-blue);">صافي ربح الشريك محمد العيسى النهائي (بعد الخصم)</div>
+                    <div class="bento-value blue" id="final-mohamed-profit" style="font-size: 1.6rem;">0 د.أ</div>
+                </div>
+
+                <div class="bento-card" style="background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.35);">
+                    <div class="bento-title" style="color: var(--accent-green);">إجمالي ربح الشريك لواء الدين النهائي (رأس المال + المكافأة)</div>
+                    <div class="bento-value green" id="final-liwaa-profit" style="font-size: 1.6rem;">0 د.أ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAB BUTTON -->
+    <button id="fab-add" class="fab-btn" onclick="AppController.addInventoryRow()" title="إضافة صنف جديد">+</button>
+
+    <!-- STICKY BOTTOM BAR -->
+    <div class="bottom-bar">
+        <div class="bottom-bar-content">
+            <nav class="mobile-nav-tabs">
+                <button class="nav-tab-btn active" onclick="AppController.switchTab(this, 'tab-inventory')">
+                    📦 الجرد
+                </button>
+                <button class="nav-tab-btn" onclick="AppController.switchTab(this, 'tab-budget')">
+                    💰 الميزانية
+                </button>
+                <button class="nav-tab-btn" onclick="AppController.switchTab(this, 'tab-profit')">
+                    🤝 الأرباح
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">تم الإنجاز بنجاح!</div>
+
+    <script>
+    const LogicEngine = {
+        getIconForName(name) {
+            const str = (name || '').trim().toLowerCase();
+            if (str.includes('شاشة') || str.includes('تلفزيون')) return '📺';
+            if (str.includes('مكيف') || str.includes('سبليت') || str.includes('تبريد')) return '❄️';
+            if (str.includes('ثلاجة') || str.includes('فريزر') || str.includes('برد')) return '🧊';
+            if (str.includes('غسالة') || str.includes('نشافة')) return '🧺';
+            if (str.includes('غاز') || str.includes('فرن') || str.includes('طباخ')) return '🍳';
+            if (str.includes('مروحة') || str.includes('دفاية')) return '🌡️';
+            return '⚡';
+        },
+
+        escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        },
+
+        cleanNumber(str, allowMath = false, isQty = false) {
+            if (!str && str !== 0) return '';
+            let s = String(str).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+            if (isQty) {
+                s = allowMath ? s.replace(/[^0-9+-/*()]/g, '') : s.replace(/[^0-9]/g, '');
+            } else {
+                s = allowMath ? s.replace(/[^0-9.+-/*()]/g, '') : s.replace(/[^0-9.]/g, '');
+                const parts = s.split('.');
+                if (parts.length > 2) s = parts[0] + '.' + parts.slice(1).join('');
+            }
+            return s;
+        },
+
+        evalMath(exprStr, isQty = false) {
+            if (!exprStr && exprStr !== 0) return '0';
+            let s = this.cleanNumber(exprStr, true, isQty);
+            s = s.replace(/[+\-*/]+$/, '');
+            if (!s) return '0';
+
+            if (/[+\-*/]/.test(s)) {
+                try {
+                    const sanitized = s.replace(/[^0-9.+-/*()]/g, '');
+                    if (sanitized) {
+                        const safeResult = Function('"use strict"; return (' + sanitized + ')')();
+                        if (!isNaN(safeResult) && isFinite(safeResult)) {
+                            const val = Math.max(0, safeResult);
+                            return String(Math.round(val));
+                        }
+                    }
+                } catch(e) {}
+            }
+            const parsed = parseFloat(s) || 0;
+            return String(Math.round(parsed));
+        },
+
+        calculateItemSubtotal(qtyStr, priceStr) {
+            const qtyVal = parseInt(this.evalMath(qtyStr, true), 10) || 0;
+            const priceVal = parseFloat(priceStr) || 0;
+            return {
+                qtyVal,
+                priceVal,
+                subtotal: Math.round(qtyVal * priceVal),
+                isComplete: (qtyVal > 0 && priceVal > 0)
+            };
+        },
+
+        calculateInventorySummary(items) {
+            let totalStockVal = 0;
+            let pricedCount = 0;
+            const categoriesSet = new Set();
+
+            items.forEach(item => {
+                const calc = this.calculateItemSubtotal(item.qty, item.price);
+                totalStockVal += calc.subtotal;
+                if (calc.isComplete) pricedCount++;
+
+                const firstWord = (item.name || '').trim().split(/\s+/)[0];
+                if (firstWord && firstWord !== 'أخرى') categoriesSet.add(firstWord);
+            });
+
+            totalStockVal = Math.round(totalStockVal);
+            const totalCount = items.length;
+            const unpricedCount = totalCount - pricedCount;
+            const progressPct = totalCount > 0 ? Math.round((pricedCount / totalCount) * 100) : 0;
+
+            return { totalStockVal, totalCount, pricedCount, unpricedCount, progressPct, categories: Array.from(categoriesSet) };
+        },
+
+        calculateBudget({ stockVal, cash, debtsToUs, debtsWeOwe, monthlyExpense, capMohamed, capLiwaa }) {
+            const totalCapital = Math.round(capMohamed + capLiwaa);
+            const totalAssets = Math.round(stockVal + cash + debtsToUs);
+            const annualExpenses = Math.round(monthlyExpense * 12);
+            
+            const netProfit = Math.round(totalAssets - debtsWeOwe - totalCapital);
+            const grossProfit = Math.round(netProfit + annualExpenses);
+
+            return { totalCapital, totalAssets, annualExpenses, netProfit, grossProfit };
+        },
+
+        calculateProfitDistribution({ netProfit, capMohamed, capLiwaa, totalCapital, mudarabaPctVal }) {
+            const mudarabaPct = (mudarabaPctVal || 0) / 100;
+            const ratioMohamed = totalCapital > 0 ? (capMohamed / totalCapital) : 0;
+            const ratioLiwaa = totalCapital > 0 ? (capLiwaa / totalCapital) : 0;
+
+            const baseMohamed = Math.round(netProfit * ratioMohamed);
+            const baseLiwaa = netProfit - baseMohamed;
+
+            let mudarabaFee = 0;
+            if (netProfit > 0) {
+                mudarabaFee = Math.round(baseMohamed * mudarabaPct);
+            }
+
+            const finalMohamed = baseMohamed - mudarabaFee;
+            const finalLiwaa = baseLiwaa + mudarabaFee;
+
+            return { ratioMohamed, ratioLiwaa, baseMohamed, baseLiwaa, mudarabaFee, finalMohamed, finalLiwaa };
+        },
+
+        formatMoney(val) {
+            const n = Math.round(parseFloat(val));
+            if (isNaN(n)) return '0 د.أ';
+            return n.toLocaleString('en-US') + ' د.أ';
+        },
+
+        formatNumber(val) {
+            const n = Math.round(parseFloat(val));
+            if (isNaN(n)) return '0';
+            return n.toLocaleString('en-US');
+        }
+    };
+
+    const DataStore = {
+        defaultItems: [
+            { id: 'item-1', name: 'شاشة', qty: '', price: 0, locked: false },
+            { id: 'item-2', name: 'مكيف 2طن الكترك', qty: '', price: 0, locked: false },
+            { id: 'item-3', name: 'مكيف 2 طن رامكو', qty: '', price: 0, locked: false },
+            { id: 'item-4', name: 'مكيف 1 طن الكترك', qty: '', price: 0, locked: false },
+            { id: 'item-5', name: 'مكيف 1.5 الكترك', qty: '', price: 0, locked: false },
+            { id: 'item-6', name: 'مكيف 1.5 سونك', qty: '', price: 0, locked: false },
+            { id: 'item-7', name: 'ثلاجة ساميكس 600', qty: '', price: 0, locked: false },
+            { id: 'item-8', name: 'فريزر 5 درج ساميكس', qty: '', price: 0, locked: false }
+        ],
+
+        state: {
+            inventory: [],
+            budget: { cash: '11110', debtsToUs: '59655', debtsWeOwe: '200', monthlyExpense: '400' },
+            partners: { capMohamed: '78000', capLiwaa: '35500', mudarabaPct: '50' },
+            ui: { activeFilter: 'all', activeCategory: 'all', viewMode: 'cards', currentPinInput: '' }
+        },
+
+        safeGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } },
+        safeSet(key, val) { try { localStorage.setItem(key, val); } catch(e) {} },
+        safeRemove(key) { try { localStorage.removeItem(key); } catch(e) {} },
+
+        loadAll() {
+            const savedInventory = this.safeGet('inv_items_2026');
+            if (savedInventory) {
+                try {
+                    this.state.inventory = JSON.parse(savedInventory);
+                    this.state.inventory.forEach((item, idx) => { if (!item.id) item.id = 'item-' + Date.now() + '-' + idx; });
+                } catch(e) {
+                    this.state.inventory = JSON.parse(JSON.stringify(this.defaultItems));
+                }
+            } else {
+                this.state.inventory = JSON.parse(JSON.stringify(this.defaultItems));
+            }
+
+            /* إصلاح قراءة القيمة 0 والقيمة الفارغة دون الرجوع التلقائي للافتراضي */
+            const getStoredVal = (key, defaultVal) => {
+                const stored = this.safeGet(key);
+                return (stored !== null && stored !== undefined) ? LogicEngine.cleanNumber(stored) : defaultVal;
+            };
+
+            this.state.budget.cash = getStoredVal('budget_cash', '11110');
+            this.state.budget.debtsToUs = getStoredVal('budget_debts_to_us', '59655');
+            this.state.budget.debtsWeOwe = getStoredVal('budget_debts_we_owe', '200');
+            this.state.budget.monthlyExpense = getStoredVal('budget_monthly_expense', '400');
+
+            this.state.partners.capMohamed = getStoredVal('cap_mohamed', '78000');
+            this.state.partners.capLiwaa = getStoredVal('cap_liwaa', '35500');
+            this.state.partners.mudarabaPct = getStoredVal('mudaraba_pct', '50');
+            
+            this.state.ui.viewMode = this.safeGet('inv_view_mode') || 'cards';
+        },
+
+        saveInventory() { this.safeSet('inv_items_2026', JSON.stringify(this.state.inventory)); },
+        saveBudget() {
+            this.safeSet('budget_cash', this.state.budget.cash);
+            this.safeSet('budget_debts_to_us', this.state.budget.debtsToUs);
+            this.safeSet('budget_debts_we_owe', this.state.budget.debtsWeOwe);
+            this.safeSet('budget_monthly_expense', this.state.budget.monthlyExpense);
+            this.safeSet('cap_mohamed', this.state.partners.capMohamed);
+            this.safeSet('cap_liwaa', this.state.partners.capLiwaa);
+            this.safeSet('mudaraba_pct', this.state.partners.mudarabaPct);
+        },
+
+        resetAll() {
+            ['inv_items_2026', 'budget_cash', 'budget_debts_to_us', 'budget_debts_we_owe', 'budget_monthly_expense', 'cap_mohamed', 'cap_liwaa', 'mudaraba_pct', 'inv_view_mode'].forEach(k => this.safeRemove(k));
+            this.loadAll();
+        },
+
+        getPin() { return this.safeGet('app_pin_code') || '1234'; },
+        setPin(newPin) { this.safeSet('app_pin_code', newPin); }
+    };
+
+    let scrollTimeout = null;
+
+    const UIView = {
+        focusAtEnd(inputElem, shouldScroll = false) {
+            if (!inputElem) return;
+            setTimeout(() => {
+                try {
+                    inputElem.focus({ preventScroll: true });
+                } catch(e) {
+                    inputElem.focus();
+                }
+                const val = inputElem.value;
+                inputElem.value = '';
+                inputElem.value = val;
+            }, 30);
+
+            if (shouldScroll) {
+                if (scrollTimeout) clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    try {
+                        const card = inputElem.closest('.item-card') || inputElem.closest('.bento-card') || inputElem;
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } catch(e) {}
+                }, 300);
+            }
+        },
+
+        clearInput(id, realIndex, field) {
+            const input = document.getElementById(id);
+            if (input) {
+                input.value = '';
+                if (realIndex !== undefined && field) {
+                    AppController.updateItemField(realIndex, field, '');
+                } else {
+                    AppController.handleBudgetChange();
+                }
+                this.focusAtEnd(input, false);
+            }
+        },
+
+        showToast(text) {
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.innerText = text;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            }
+        },
+
+        updateAutoSaveTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'م' : 'ص';
+            hours = hours % 12 || 12;
+            const minStr = minutes < 10 ? '0' + minutes : minutes;
+            const el = document.getElementById('autosave-time');
+            if (el) el.innerText = 'محفوظ ' + hours + ':' + minStr + ' ' + ampm;
+        },
+
+        renderPinDots(length) {
+            for (let i = 0; i < 4; i++) {
+                const dot = document.getElementById('pdot-' + i);
+                if (dot) dot.classList.toggle('filled', i < length);
+            }
+        },
+
+        renderCategoryPills(categories, activeCat) {
+            const container = document.getElementById('category-pills-container');
+            if (!container) return;
+
+            let html = `<button class="category-pill ${activeCat === 'all' ? 'active' : ''}" onclick="AppController.setCategoryFilter('all', this)">كل الأقسام</button>`;
+            categories.forEach(cat => {
+                const safeCat = LogicEngine.escapeHTML(cat);
+                html += `<button class="category-pill ${activeCat === cat ? 'active' : ''}" onclick="AppController.setCategoryFilter('${safeCat}', this)">${safeCat}</button>`;
+            });
+            html += `<button class="category-pill ${activeCat === 'أخرى' ? 'active' : ''}" onclick="AppController.setCategoryFilter('أخرى', this)">أخرى</button>`;
+            container.innerHTML = html;
+        },
+
+        renderInventoryCards(items, activeFilter, activeCategory, searchQuery) {
+            const container = document.getElementById('inventory-cards-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            items.forEach((item, realIndex) => {
+                const calc = LogicEngine.calculateItemSubtotal(item.qty, item.price);
+                const isLocked = !!item.locked;
+                const firstWord = (item.name || '').trim().split(/\s+/)[0] || 'أخرى';
+
+                const matchSearch = (item.name || '').toLowerCase().includes(searchQuery);
+                const matchPriced = activeFilter === 'all' || (activeFilter === 'priced' && calc.isComplete) || (activeFilter === 'unpriced' && !calc.isComplete);
+                const matchCategory = activeCategory === 'all' || (activeCategory === 'أخرى' ? firstWord === 'أخرى' : firstWord === activeCategory);
+
+                if (!matchSearch || !matchPriced || !matchCategory) return;
+
+                const icon = LogicEngine.getIconForName(item.name);
+                const safeName = LogicEngine.escapeHTML(item.name || '');
+
+                const card = document.createElement('div');
+                card.className = `item-card ${!calc.isComplete ? 'incomplete' : ''} ${isLocked ? 'locked' : ''}`;
+                card.id = 'item-card-' + realIndex;
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <div class="card-icon-title">
+                            <span class="item-cat-icon">${icon}</span>
+                            <div class="input-wrapper">
+                                <input type="text" id="input-name-${realIndex}" class="item-name-input" placeholder="اسم الجهاز / الصنف" value="${safeName}" ${isLocked ? 'disabled' : ''} onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.updateItemField(${realIndex}, 'name', this.value)" onkeydown="AppController.handleKeyDown(event, ${realIndex}, 'name')">
+                                <button class="btn-tiny-clear" onclick="UIView.clearInput('input-name-${realIndex}', ${realIndex}, 'name')">✕</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body-inputs">
+                        <div class="field-box">
+                            <span class="field-label">الكمية الفعلية</span>
+                            <div class="qty-control-card">
+                                <button class="btn-qty-card" ${isLocked ? 'disabled' : ''} onclick="AppController.changeQty(${realIndex}, -1)">-</button>
+                                <div class="input-wrapper">
+                                    <input type="text" inputmode="decimal" id="input-qty-${realIndex}" class="num-input" placeholder="0" value="${item.qty !== undefined ? item.qty : ''}" ${isLocked ? 'disabled' : ''} onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" onblur="AppController.evaluateQty(${realIndex}, this)" oninput="AppController.updateItemField(${realIndex}, 'qty', this.value)" onkeydown="AppController.handleKeyDown(event, ${realIndex}, 'qty')">
+                                    <button class="btn-tiny-clear" onclick="UIView.clearInput('input-qty-${realIndex}', ${realIndex}, 'qty')">✕</button>
+                                </div>
+                                <button class="btn-qty-card" ${isLocked ? 'disabled' : ''} onclick="AppController.changeQty(${realIndex}, 1)">+</button>
+                            </div>
+                        </div>
+
+                        <div class="field-box">
+                            <span class="field-label">سعر اليوم (دينار)</span>
+                            <div class="input-wrapper">
+                                <input type="text" inputmode="decimal" id="input-price-${realIndex}" class="num-input" placeholder="0" value="${item.price !== undefined ? item.price : ''}" ${isLocked ? 'disabled' : ''} onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.updateItemField(${realIndex}, 'price', this.value)" onkeydown="AppController.handleKeyDown(event, ${realIndex}, 'price')">
+                                <button class="btn-tiny-clear" onclick="UIView.clearInput('input-price-${realIndex}', ${realIndex}, 'price')">✕</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div>
+                            <span class="field-label">الإجمالي: </span>
+                            <span class="subtotal-tag" id="subtotal-${realIndex}">${LogicEngine.formatMoney(calc.subtotal)}</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-card-action ${isLocked ? 'locked' : ''}" onclick="AppController.toggleLockRow(${realIndex})">${isLocked ? '🔒 مقفل' : '🔓 قفل'}</button>
+                            <button class="btn-card-action btn-card-delete" ${isLocked ? 'disabled style="opacity:0.4;"' : ''} onclick="AppController.deleteInventoryRow(${realIndex})">حذف</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        },
+
+        renderInventoryTable(items, activeFilter, activeCategory, searchQuery) {
+            const tbody = document.getElementById('inventory-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            items.forEach((item, realIndex) => {
+                const calc = LogicEngine.calculateItemSubtotal(item.qty, item.price);
+                const isLocked = !!item.locked;
+                const firstWord = (item.name || '').trim().split(/\s+/)[0] || 'أخرى';
+
+                const matchSearch = (item.name || '').toLowerCase().includes(searchQuery);
+                const matchPriced = activeFilter === 'all' || (activeFilter === 'priced' && calc.isComplete) || (activeFilter === 'unpriced' && !calc.isComplete);
+                const matchCategory = activeCategory === 'all' || (activeCategory === 'أخرى' ? firstWord === 'أخرى' : firstWord === activeCategory);
+
+                if (!matchSearch || !matchPriced || !matchCategory) return;
+
+                const safeName = LogicEngine.escapeHTML(item.name || '');
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <div class="input-wrapper">
+                            <input type="text" id="input-table-name-${realIndex}" class="item-name-input" value="${safeName}" ${isLocked ? 'disabled' : ''} onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.updateItemField(${realIndex}, 'name', this.value)" onkeydown="AppController.handleKeyDown(event, ${realIndex}, 'name')">
+                            <button class="btn-tiny-clear" onclick="UIView.clearInput('input-table-name-${realIndex}', ${realIndex}, 'name')">✕</button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-wrapper">
+                            <input type="text" inputmode="decimal" id="input-table-qty-${realIndex}" class="num-input" value="${item.qty !== undefined ? item.qty : ''}" ${isLocked ? 'disabled' : ''} onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" onblur="AppController.evaluateQty(${realIndex}, this)" oninput="AppController.updateItemField(${realIndex}, 'qty', this.value)" onkeydown="AppController.handleKeyDown(event, ${realIndex}, 'qty')">
+                            <button class="btn-tiny-clear" onclick="UIView.clearInput('input-table-qty-${realIndex}', ${realIndex}, 'qty')">✕</button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-wrapper">
+                            <input type="text" inputmode="decimal" id="input-table-price-${realIndex}" class="num-input" value="${item.price !== undefined ? item.price : ''}" ${isLocked ? 'disabled' : ''} onfocus="UIView.focusAtEnd(this, false)" ondblclick="this.select()" oninput="AppController.updateItemField(${realIndex}, 'price', this.value)" onkeydown="AppController.handleKeyDown(event, ${realIndex}, 'price')">
+                            <button class="btn-tiny-clear" onclick="UIView.clearInput('input-table-price-${realIndex}', ${realIndex}, 'price')">✕</button>
+                        </div>
+                    </td>
+                    <td style="font-weight:900; color:var(--accent-amber);">${LogicEngine.formatMoney(calc.subtotal)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        },
+
+        updateRowSubtotalOnly(index) {
+            const item = DataStore.state.inventory[index];
+            if (!item) return;
+            const calc = LogicEngine.calculateItemSubtotal(item.qty, item.price);
+            
+            const subCell = document.getElementById('subtotal-' + index);
+            if (subCell) subCell.innerText = LogicEngine.formatMoney(calc.subtotal);
+
+            const cardElem = document.getElementById('item-card-' + index);
+            if (cardElem) {
+                if (!calc.isComplete) cardElem.classList.add('incomplete');
+                else cardElem.classList.remove('incomplete');
+            }
+        },
+
+        renderSummaryAndBudget(invSummary, budgetResult, profitResult) {
+            document.getElementById('count-all').innerText = invSummary.totalCount;
+            document.getElementById('count-priced').innerText = invSummary.pricedCount;
+            document.getElementById('count-unpriced').innerText = invSummary.unpricedCount;
+            document.getElementById('progress-percent-text').innerText = invSummary.progressPct + '%';
+            document.getElementById('progress-fill').style.width = invSummary.progressPct + '%';
+            document.getElementById('total-stock-display').innerText = LogicEngine.formatMoney(invSummary.totalStockVal);
+
+            // TAB 2: BUDGET
+            document.getElementById('budget-stock-val').value = LogicEngine.formatNumber(invSummary.totalStockVal);
+            document.getElementById('budget-total-assets').innerText = LogicEngine.formatMoney(budgetResult.totalAssets);
+            document.getElementById('budget-gross-profit').innerText = LogicEngine.formatMoney(budgetResult.grossProfit);
+            document.getElementById('budget-annual-expenses').innerText = LogicEngine.formatMoney(budgetResult.annualExpenses);
+            document.getElementById('budget-net-profit').innerText = LogicEngine.formatMoney(budgetResult.netProfit);
+
+            // TAB 3: PROFIT DISTRIBUTION
+            document.getElementById('profit-tab-net-profit-display').innerText = LogicEngine.formatMoney(budgetResult.netProfit);
+            document.getElementById('base-mohamed').innerText = LogicEngine.formatMoney(profitResult.baseMohamed);
+            document.getElementById('base-liwaa').innerText = LogicEngine.formatMoney(profitResult.baseLiwaa);
+            document.getElementById('mudaraba-fee-display').innerText = budgetResult.netProfit <= 0 ? '0 د.أ' : LogicEngine.formatMoney(profitResult.mudarabaFee);
+            document.getElementById('final-liwaa-profit').innerText = LogicEngine.formatMoney(profitResult.finalLiwaa);
+            document.getElementById('final-mohamed-profit').innerText = LogicEngine.formatMoney(profitResult.finalMohamed);
+
+            this.updateAutoSaveTime();
+        }
+    };
+
+    const AppController = {
+        init() {
+            DataStore.loadAll();
+            this.checkLockStatus();
+
+            const savedLight = DataStore.safeGet('inv_light_mode') === 'true';
+            if (savedLight) {
+                document.body.classList.add('light-mode');
+                const btnT = document.getElementById('btn-theme-mode');
+                if (btnT) btnT.innerText = '☀️';
+            }
+
+            document.getElementById('budget-cash').value = DataStore.state.budget.cash;
+            document.getElementById('budget-debts-to-us').value = DataStore.state.budget.debtsToUs;
+            document.getElementById('budget-debts-we-owe').value = DataStore.state.budget.debtsWeOwe;
+            document.getElementById('budget-monthly-expense').value = DataStore.state.budget.monthlyExpense;
+            document.getElementById('cap-mohamed').value = DataStore.state.partners.capMohamed;
+            document.getElementById('cap-liwaa').value = DataStore.state.partners.capLiwaa;
+            document.getElementById('mudaraba-pct').value = DataStore.state.partners.mudarabaPct;
+
+            this.setViewMode(DataStore.state.ui.viewMode);
+        },
+
+        setViewMode(mode) {
+            DataStore.state.ui.viewMode = mode;
+            DataStore.safeSet('inv_view_mode', mode);
+
+            document.getElementById('btn-view-cards')?.classList.toggle('active', mode === 'cards');
+            document.getElementById('btn-view-table')?.classList.toggle('active', mode === 'table');
+
+            document.getElementById('inventory-cards-container').style.display = (mode === 'cards') ? 'grid' : 'none';
+            document.getElementById('inventory-table-container').style.display = (mode === 'table') ? 'block' : 'none';
+
+            this.refreshFullDisplay();
+        },
+
+        triggerVibration(dur = 35) {
+            if ("vibrate" in navigator) {
+                try { navigator.vibrate(dur); } catch(e) {}
+            }
+        },
+
+        openSidebar() {
+            this.triggerVibration();
+            document.getElementById('sidebar-overlay')?.classList.add('active');
+            document.getElementById('sidebar-drawer')?.classList.add('active');
+        },
+
+        closeSidebar() {
+            document.getElementById('sidebar-overlay')?.classList.remove('active');
+            document.getElementById('sidebar-drawer')?.classList.remove('active');
+        },
+
+        checkLockStatus() {
+            const overlay = document.getElementById('lock-screen-overlay');
+            if (overlay) overlay.style.display = 'flex';
+        },
+
+        lockAppNow() {
+            this.triggerVibration();
+            DataStore.state.ui.currentPinInput = '';
+            UIView.renderPinDots(0);
+            const overlay = document.getElementById('lock-screen-overlay');
+            if (overlay) overlay.style.display = 'flex';
+            UIView.showToast("تم قفل التطبيق");
+        },
+
+        pressPin(num) {
+            this.triggerVibration(20);
+            if (DataStore.state.ui.currentPinInput.length < 4) {
+                DataStore.state.ui.currentPinInput += num;
+                UIView.renderPinDots(DataStore.state.ui.currentPinInput.length);
+                if (DataStore.state.ui.currentPinInput.length === 4) {
+                    setTimeout(() => this.verifyPinCode(), 150);
+                }
+            }
+        },
+
+        backspacePin() {
+            this.triggerVibration(15);
+            if (DataStore.state.ui.currentPinInput.length > 0) {
+                DataStore.state.ui.currentPinInput = DataStore.state.ui.currentPinInput.slice(0, -1);
+                UIView.renderPinDots(DataStore.state.ui.currentPinInput.length);
+            }
+        },
+
+        clearPin() {
+            this.triggerVibration(15);
+            DataStore.state.ui.currentPinInput = '';
+            UIView.renderPinDots(0);
+        },
+
+        verifyPinCode() {
+            if (DataStore.state.ui.currentPinInput === DataStore.getPin()) {
+                this.triggerVibration(50);
+                document.getElementById('lock-screen-overlay').style.display = 'none';
+                this.clearPin();
+                UIView.showToast("تم إلغاء القفل بنجاح!");
+            } else {
+                this.triggerVibration([100, 50, 100]);
+                alert("رمز الـ PIN غير صحيح!");
+                this.clearPin();
+            }
+        },
+
+        changeAppPin() {
+            this.triggerVibration();
+            this.closeSidebar();
+            const inputOld = prompt("أدخل رمز الـ PIN الحالي:");
+            if (inputOld === DataStore.getPin()) {
+                const inputNew = prompt("أدخل رمز الـ PIN الجديد (4 أرقام):");
+                if (inputNew && inputNew.length === 4 && /^\d+$/.test(inputNew)) {
+                    DataStore.setPin(inputNew);
+                    alert("تم تغيير الرمز السري بنجاح!");
+                } else {
+                    alert("رمز غير صالح! يجب أن يتكون من 4 أرقام بالضبط.");
+                }
+            } else if (inputOld !== null) {
+                alert("الرمز الحالي غير صحيح!");
+            }
+        },
+
+        toggleThemeMode() {
+            this.triggerVibration();
+            const isLight = document.body.classList.toggle('light-mode');
+            const btn = document.getElementById('btn-theme-mode');
+            if (btn) btn.innerText = isLight ? '☀️' : '🌙';
+            DataStore.safeSet('inv_light_mode', isLight ? 'true' : 'false');
+        },
+
+        switchTab(btnElem, tabId) {
+            this.triggerVibration();
+            document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            btnElem.classList.add('active');
+            document.getElementById(tabId)?.classList.add('active');
+
+            const fab = document.getElementById('fab-add');
+            if (fab) fab.style.display = (tabId === 'tab-inventory') ? 'flex' : 'none';
+        },
+
+        refreshFullDisplay() {
+            const invSummary = LogicEngine.calculateInventorySummary(DataStore.state.inventory);
+            const searchQuery = (document.getElementById('inventory-search')?.value || '').toLowerCase().trim();
+
+            UIView.renderCategoryPills(invSummary.categories, DataStore.state.ui.activeCategory);
+
+            if (DataStore.state.ui.viewMode === 'cards') {
+                UIView.renderInventoryCards(DataStore.state.inventory, DataStore.state.ui.activeFilter, DataStore.state.ui.activeCategory, searchQuery);
+            } else {
+                UIView.renderInventoryTable(DataStore.state.inventory, DataStore.state.ui.activeFilter, DataStore.state.ui.activeCategory, searchQuery);
+            }
+
+            this.recalculateSummariesOnly(invSummary);
+        },
+
+        recalculateSummariesOnly(givenInvSummary = null) {
+            const invSummary = givenInvSummary || LogicEngine.calculateInventorySummary(DataStore.state.inventory);
+            
+            const budgetResult = LogicEngine.calculateBudget({
+                stockVal: invSummary.totalStockVal,
+                cash: parseFloat(DataStore.state.budget.cash) || 0,
+                debtsToUs: parseFloat(DataStore.state.budget.debtsToUs) || 0,
+                debtsWeOwe: parseFloat(DataStore.state.budget.debtsWeOwe) || 0,
+                monthlyExpense: parseFloat(DataStore.state.budget.monthlyExpense) || 0,
+                capMohamed: parseFloat(DataStore.state.partners.capMohamed) || 0,
+                capLiwaa: parseFloat(DataStore.state.partners.capLiwaa) || 0
+            });
+
+            const profitResult = LogicEngine.calculateProfitDistribution({
+                netProfit: budgetResult.netProfit,
+                capMohamed: parseFloat(DataStore.state.partners.capMohamed) || 0,
+                capLiwaa: parseFloat(DataStore.state.partners.capLiwaa) || 0,
+                totalCapital: budgetResult.totalCapital,
+                mudarabaPctVal: parseFloat(DataStore.state.partners.mudarabaPct) || 0
+            });
+
+            UIView.renderSummaryAndBudget(invSummary, budgetResult, profitResult);
+        },
+
+        updateItemField(index, field, value) {
+            if (!DataStore.state.inventory[index] || DataStore.state.inventory[index].locked) return;
+            
+            let cleaned = value;
+            if (field === 'qty') cleaned = LogicEngine.cleanNumber(value, true, true);
+            else if (field === 'price') cleaned = LogicEngine.cleanNumber(value, false, false);
+
+            DataStore.state.inventory[index][field] = cleaned;
+            DataStore.saveInventory();
+            
+            UIView.updateRowSubtotalOnly(index);
+            this.recalculateSummariesOnly();
+        },
+
+        evaluateQty(index, inputElem) {
+            if (!DataStore.state.inventory[index]) return;
+            const val = inputElem.value;
+            if (!val) return;
+            const evaluated = LogicEngine.evalMath(val, true);
+            inputElem.value = evaluated;
+            DataStore.state.inventory[index].qty = evaluated;
+            DataStore.saveInventory();
+            UIView.updateRowSubtotalOnly(index);
+            this.recalculateSummariesOnly();
+        },
+
+        changeQty(index, delta) {
+            if (!DataStore.state.inventory[index] || DataStore.state.inventory[index].locked) return;
+            this.triggerVibration(25);
+            const currentQtyStr = LogicEngine.evalMath(DataStore.state.inventory[index].qty, true);
+            const currentQty = parseInt(currentQtyStr, 10) || 0;
+            const newQty = Math.max(0, currentQty + delta);
+            DataStore.state.inventory[index].qty = newQty === 0 ? '' : String(newQty);
+            
+            const inp = document.getElementById((DataStore.state.ui.viewMode === 'table' ? 'input-table-qty-' : 'input-qty-') + index);
+            if (inp) inp.value = DataStore.state.inventory[index].qty;
+
+            DataStore.saveInventory();
+            UIView.updateRowSubtotalOnly(index);
+            this.recalculateSummariesOnly();
+        },
+
+        toggleLockRow(index) {
+            this.triggerVibration();
+            if (DataStore.state.inventory[index]) {
+                DataStore.state.inventory[index].locked = !DataStore.state.inventory[index].locked;
+                DataStore.saveInventory();
+                this.refreshFullDisplay();
+                UIView.showToast(DataStore.state.inventory[index].locked ? 'تم قفل الصنف' : 'تم فك القفل');
+            }
+        },
+
+        addInventoryRow() {
+            this.triggerVibration();
+            const searchInp = document.getElementById('inventory-search');
+            if (searchInp && searchInp.value) searchInp.value = '';
+            DataStore.state.ui.activeFilter = 'all';
+            DataStore.state.ui.activeCategory = 'all';
+
+            const newItem = { id: 'item-' + Date.now(), name: '', qty: '', price: 0, locked: false };
+            DataStore.state.inventory.push(newItem);
+            DataStore.saveInventory();
+
+            this.refreshFullDisplay();
+
+            const newIndex = DataStore.state.inventory.length - 1;
+            const prefix = DataStore.state.ui.viewMode === 'table' ? 'input-table-' : 'input-';
+            const newInp = document.getElementById(prefix + 'name-' + newIndex);
+            if (newInp) {
+                setTimeout(() => {
+                    UIView.focusAtEnd(newInp, true);
+                }, 100);
+            }
+        },
+
+        deleteInventoryRow(index) {
+            if (DataStore.state.inventory[index] && DataStore.state.inventory[index].locked) return;
+            this.triggerVibration();
+            if (confirm("هل تريد حذف هذا الصنف من الجرد؟")) {
+                DataStore.state.inventory.splice(index, 1);
+                DataStore.saveInventory();
+                this.refreshFullDisplay();
+            }
+        },
+
+        handleBudgetChange() {
+            DataStore.state.budget.cash = LogicEngine.cleanNumber(document.getElementById('budget-cash').value);
+            DataStore.state.budget.debtsToUs = LogicEngine.cleanNumber(document.getElementById('budget-debts-to-us').value);
+            DataStore.state.budget.debtsWeOwe = LogicEngine.cleanNumber(document.getElementById('budget-debts-we-owe').value);
+            DataStore.state.budget.monthlyExpense = LogicEngine.cleanNumber(document.getElementById('budget-monthly-expense').value);
+
+            DataStore.state.partners.capMohamed = LogicEngine.cleanNumber(document.getElementById('cap-mohamed').value);
+            DataStore.state.partners.capLiwaa = LogicEngine.cleanNumber(document.getElementById('cap-liwaa').value);
+            DataStore.state.partners.mudarabaPct = LogicEngine.cleanNumber(document.getElementById('mudaraba-pct').value);
+
+            DataStore.saveBudget();
+            this.recalculateSummariesOnly();
+        },
+
+        setFilter(type, btnElem) {
+            this.triggerVibration();
+            DataStore.state.ui.activeFilter = type;
+            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            if (btnElem) btnElem.classList.add('active');
+            this.refreshFullDisplay();
+        },
+
+        setCategoryFilter(cat, btnElem) {
+            this.triggerVibration();
+            DataStore.state.ui.activeCategory = cat;
+            this.refreshFullDisplay();
+        },
+
+        handleSearchInput() {
+            this.refreshFullDisplay();
+        },
+
+        handleKeyDown(event, index, field) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const prefix = DataStore.state.ui.viewMode === 'table' ? 'input-table-' : 'input-';
+                if (field === 'name') {
+                    const el = document.getElementById(prefix + 'qty-' + index);
+                    if (el) UIView.focusAtEnd(el, false);
+                } else if (field === 'qty') {
+                    const qtyEl = document.getElementById(prefix + 'qty-' + index);
+                    if (qtyEl) this.evaluateQty(index, qtyEl);
+                    const el = document.getElementById(prefix + 'price-' + index);
+                    if (el) UIView.focusAtEnd(el, false);
+                } else if (field === 'price') {
+                    this.navigateRow(index, 'name', 'down');
+                }
+            }
+        },
+
+        navigateRow(currentIndex, field, direction) {
+            const step = direction === 'down' ? 1 : -1;
+            let targetIndex = currentIndex + step;
+            const prefix = DataStore.state.ui.viewMode === 'table' ? 'input-table-' : 'input-';
+            while (targetIndex >= 0 && targetIndex < DataStore.state.inventory.length) {
+                const el = document.getElementById(prefix + field + '-' + targetIndex);
+                if (el && !el.disabled && el.offsetParent !== null) {
+                    UIView.focusAtEnd(el, true);
+                    return;
+                }
+                targetIndex += step;
+            }
+            if (direction === 'down' && targetIndex >= DataStore.state.inventory.length) {
+                this.addInventoryRow();
+            }
+        },
+
+        resetAllData() {
+            this.triggerVibration();
+            this.closeSidebar();
+            if (confirm("هل أنت متأكد من تصفير جميع بيانات الجرد والميزانية والبدء من جديد؟")) {
+                DataStore.resetAll();
+                this.init();
+                UIView.showToast("تم تصفير البيانات بنجاح!");
+            }
+        },
+
+        async backupJSONData() {
+            this.triggerVibration();
+            this.closeSidebar();
+            const dataObj = {
+                inventoryItems: DataStore.state.inventory,
+                cash: DataStore.state.budget.cash,
+                debtsToUs: DataStore.state.budget.debtsToUs,
+                debtsWeOwe: DataStore.state.budget.debtsWeOwe,
+                monthlyExpense: DataStore.state.budget.monthlyExpense,
+                capMohamed: DataStore.state.partners.capMohamed,
+                capLiwaa: DataStore.state.partners.capLiwaa,
+                mudarabaPct: DataStore.state.partners.mudarabaPct
+            };
+
+            const jsonText = JSON.stringify(dataObj, null, 2);
+            const fileName = "نسخة_احتياطية_جرد_2026.json";
+
+            if (navigator.canShare && navigator.canShare({ files: [new File([], '')] })) {
+                try {
+                    const file = new File([jsonText], fileName, { type: 'application/json' });
+                    await navigator.share({ title: 'نسخة احتياطية جرد 2026', text: 'ملف البيانات', files: [file] });
+                    UIView.showToast("تم الحفظ والمشاركة!");
+                    return;
+                } catch (err) {}
+            }
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonText);
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", fileName);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+            UIView.showToast("تم التنزيل المباشر في Downloads");
+        },
+
+        restoreJSONData(event) {
+            this.triggerVibration();
+            this.closeSidebar();
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.inventoryItems) {
+                        DataStore.state.inventory = imported.inventoryItems;
+                        if (imported.cash !== undefined) DataStore.state.budget.cash = imported.cash;
+                        if (imported.debtsToUs !== undefined) DataStore.state.budget.debtsToUs = imported.debtsToUs;
+                        if (imported.debtsWeOwe !== undefined) DataStore.state.budget.debtsWeOwe = imported.debtsWeOwe;
+                        if (imported.monthlyExpense !== undefined) DataStore.state.budget.monthlyExpense = imported.monthlyExpense;
+                        if (imported.capMohamed !== undefined) DataStore.state.partners.capMohamed = imported.capMohamed;
+                        if (imported.capLiwaa !== undefined) DataStore.state.partners.capLiwaa = imported.capLiwaa;
+                        if (imported.mudarabaPct !== undefined) DataStore.state.partners.mudarabaPct = imported.mudarabaPct;
+
+                        DataStore.saveInventory();
+                        DataStore.saveBudget();
+                        this.init();
+                        UIView.showToast("تم استرجاع البيانات بنجاح!");
+                    }
+                } catch(err) {
+                    alert("ملف غير صالح!");
+                }
+            };
+            reader.readAsText(file);
+        },
+
+        sendToWhatsApp() {
+            this.triggerVibration();
+            this.closeSidebar();
+            try {
+                const stockVal = LogicEngine.calculateInventorySummary(DataStore.state.inventory).totalStockVal;
+                const grossProfitStr = document.getElementById('budget-gross-profit')?.innerText || '0';
+                const expensesStr = document.getElementById('budget-annual-expenses')?.innerText || '0';
+                const netProfitStr = document.getElementById('budget-net-profit')?.innerText || '0';
+                const baseMohamedStr = document.getElementById('base-mohamed')?.innerText || '0';
+                const mudarabaFeeStr = document.getElementById('mudaraba-fee-display')?.innerText || '0';
+                const finalLiwaaStr = document.getElementById('final-liwaa-profit')?.innerText || '0';
+                const finalMohamedStr = document.getElementById('final-mohamed-profit')?.innerText || '0';
+
+                let msg = "📊 *تقرير التدقيق المالي والجرد السنوي 2026*\n";
+                msg += "*محلات لواء الدين للأجهزة الكهربائية*\n";
+                msg += "----------------------------------\n";
+                msg += "• إجمالي قيمة بضاعة المستودع: " + LogicEngine.formatMoney(stockVal) + "\n";
+                msg += "• الربح الإجمالي التشغيلي (قبل المصاريف): " + grossProfitStr + "\n";
+                msg += "• (-) المصاريف السنوية الثابتة: " + expensesStr + "\n";
+                msg += "• (=) صافي الربح السنوي النهائي: " + netProfitStr + "\n";
+                msg += "----------------------------------\n";
+                msg += "🤝 *توزيع الأرباح والشركاء*:\n";
+                msg += "• ربح رأس مال محمد الأولي: " + baseMohamedStr + "\n";
+                msg += "• مكافأة المضاربة والإدارة للواء (خصم من محمد): " + mudarabaFeeStr + "\n";
+                msg += "• صافي ربح الشريك محمد العيسى النهائي: " + finalMohamedStr + "\n";
+                msg += "• إجمالي ربح الشريك لواء الدين النهائي: " + finalLiwaaStr + "\n";
+                msg += "----------------------------------\n";
+                msg += "تم الاستخراج أوتوماتيكياً بواسطة تطبيق الجرد.";
+
+                const waUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(msg);
+                window.open(waUrl, '_blank');
+                UIView.showToast("تم فتح الواتساب ونسخ التقرير!");
+            } catch (e) {
+                UIView.showToast("تم نسخ التقرير للحافظة!");
+            }
+        },
+
+        exportToCSV() {
+            this.triggerVibration();
+            this.closeSidebar();
+            let csv = "\uFEFF";
+            csv += "رقم,اسم الجهاز / الصنف,الكمية الفعلية,سعر اليوم (دينار),الإجمالي (دينار)\n";
+            
+            DataStore.state.inventory.forEach((item, i) => {
+                const calc = LogicEngine.calculateItemSubtotal(item.qty, item.price);
+                const cleanName = (item.name || '-').replace(/"/g, '""');
+                csv += `${i + 1},"${cleanName}",${calc.qtyVal},${calc.priceVal},${calc.subtotal}\n`;
+            });
+
+            const cleanText = (id) => (document.getElementById(id)?.innerText || '0').replace(/د\.أ/g, '').replace(/,/g, '').trim();
+
+            csv += "\nالخلاصة المالية والميزانية الختامية 2026\nالبيان,القيمة (دينار)\n";
+            csv += `إجمالي بضاعة المستودع المعروضة,${document.getElementById('budget-stock-val')?.value || '0'}\n`;
+            csv += `الكاش الصافي المتوفر,${DataStore.state.budget.cash}\n`;
+            csv += `الديون التي لنا (الزبائن),${DataStore.state.budget.debtsToUs}\n`;
+            csv += `الديون التي علينا (الموردين),${DataStore.state.budget.debtsWeOwe}\n`;
+            csv += `الربح الإجمالي التشغيلي (قبل المصاريف),${cleanText('budget-gross-profit')}\n`;
+            csv += `المصاريف السنوية الثابتة (12 شهر),${cleanText('budget-annual-expenses')}\n`;
+            csv += `صافي الربح السنوي النهائي (بعد الخصم),${cleanText('budget-net-profit')}\n\n`;
+
+            csv += "توزيع الأرباح الصافية والشراكة\nبيان التوزيع,القيمة (دينار)\n";
+            csv += `ربح رأس مال محمد الأولي,${cleanText('base-mohamed')}\n`;
+            csv += `ربح رأس مال لواء الأولي,${cleanText('base-liwaa')}\n`;
+            csv += `مكافأة المضاربة والإدارة للواء (خصم من محمد),${cleanText('mudaraba-fee-display')}\n`;
+            csv += `صافي ربح الشريك محمد العيسى النهائي,${cleanText('final-mohamed-profit')}\n`;
+            csv += `إجمالي ربح الشريك لواء الدين النهائي,${cleanText('final-liwaa-profit')}\n`;
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", "جرد_المعرض_والميزانية_2026.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            UIView.showToast("تم تصدير ملف الإكسل (CSV) بنجاح!");
+        }
+    };
+
+    /* رفع البطاقة لمنتصف الشاشة تلقائياً فوق الكيبورد عند الضغط على أي حقل */
+    document.addEventListener('focusin', function (e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+            setTimeout(() => {
+                try {
+                    const targetCard = e.target.closest('.item-card') || e.target.closest('.bento-card') || e.target;
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } catch(err) {}
+            }, 300);
+        }
+    });
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => AppController.init());
+    } else {
+        AppController.init();
+    }
+    </script>
+
+    <!-- SERVICE WORKER REGISTRATION (OFFLINE SUPPORT) -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
+    }
+    </script>
+</body>
+</html>
